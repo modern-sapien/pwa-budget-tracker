@@ -3,7 +3,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const compression = require("compression");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -21,6 +21,17 @@ mongoose.connect(
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false
+});
+
+// mongoose connected successfully 
+const connection = mongoose.connection;
+connection.on("connected", () => {
+  console.log("Mongoose successfully connected.");
+});
+
+// Logs if there is an error on connection
+connection.on("error", (err) => {
+  console.log("Mongoose connection error: ", err);
 });
 
 // routes
